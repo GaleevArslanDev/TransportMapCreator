@@ -3,6 +3,8 @@ from tkinter import messagebox
 from tkinter import filedialog
 import webbrowser
 
+data = ""
+
 root = Tk()
 root.title("Создатель маршрутов внутригородского общественного транспорта")
 root.geometry("850x600")
@@ -21,12 +23,20 @@ def create_click():
         with open(filepath, "w") as file:
             file.write(text)
 
+def save_click():
+    filepath = filedialog.asksaveasfilename(defaultextension="tm", initialfile="new.tm", filetypes=[("Transport Map files", "*.tm")], confirmoverwrite=True)
+    if filepath != "":
+        with open(filepath, "w") as file:
+            global data
+            file.write(data)
+
 def open_click():
     filepath = filedialog.askopenfilename(defaultextension="tm", filetypes=[("Transport Map files", "*.tm")])
     if filepath != "":
         with open(filepath, "r") as file:
             text = file.read()
-            print(text)
+            global data
+            data = text
             # text_editor.delete("1.0", END)
             # text_editor.insert("1.0", text)
 
@@ -34,7 +44,7 @@ main_menu = Menu()
 
 file_menu = Menu(tearoff=0)
 file_menu.add_command(label="Создать", command=create_click)
-file_menu.add_command(label="Сохранить")
+file_menu.add_command(label="Сохранить", command=save_click())
 file_menu.add_command(label="Открыть", command=open_click)
 file_menu.add_separator()
 file_menu.add_command(label="Выход")
